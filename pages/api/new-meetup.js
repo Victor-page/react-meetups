@@ -1,7 +1,7 @@
 // /api/new-meetup
 // POST /api/new-meetup
 
-import { MongoClient } from 'mongodb';
+import connectToDatabase from '../../libs/mongodb';
 
 const handler = async (request, response) => {
   if (request.method !== 'POST') {
@@ -11,11 +11,9 @@ const handler = async (request, response) => {
   const data = request.body;
   // const { title, image, address, description } = data;
 
-  const client = await MongoClient.connect();
-  const db = client.db();
-  const meetupsCollection = db.collection('meetups');
+  const { client, meetupsCollection } = await connectToDatabase();
+
   const result = await meetupsCollection.insertOne(data);
-  console.log(result);
   client.close();
 
   response.status(201).json({ message: 'Meetup inserted!', result, data });

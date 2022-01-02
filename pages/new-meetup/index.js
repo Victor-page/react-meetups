@@ -5,14 +5,19 @@ const NewMeetUpPage = () => {
   const router = useRouter();
 
   const addMeetupHandler = async (enteredMeetupData) => {
-    const response = await fetch('/api/new-meetup', {
+    // get the current environment
+    const dev = process.env.NODE_ENV !== 'production';
+    const { DEV_URL, PROD_URL } = process.env;
+    const api = `${dev ? DEV_URL : PROD_URL}/api/new-meetup`;
+
+    const response = await fetch(api, {
       method: 'POST',
       body: JSON.stringify(enteredMeetupData),
       headers: { 'Content-Type': 'application/json' },
     });
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     router.push('/');
   };

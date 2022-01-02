@@ -1,35 +1,52 @@
+import { ObjectId } from 'mongodb';
+import connectToDatabase from '../../libs/mongodb';
 import MeetupDetail from '../../components/meetups/MeetupDetail';
 
-const MeetupDetails = () => {
-  return (
-    <MeetupDetail
-      image=""
-      title="title"
-      description="descr"
-      address="address"
-    />
-  );
-};
+const MeetupDetails = ({
+  meetupData: { image, title, description, address },
+}) => (
+  <MeetupDetail
+    image={image}
+    title={title}
+    description={description}
+    address={address}
+  />
+);
 
 export const getStaticPaths = async () => {
+  const { client, meetupsCollection } = await connectToDatabase();
+
+  const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+
+  client.close();
+
   return {
     fallback: false,
-    paths: [{ params: { meetupId: 'm1' } }, { params: { meetupId: 'm2' } }],
+    paths: meetups.map((meetupDocument) => ({
+      params: { meetupId: meetupDocument._id.toHexString() },
+    })),
   };
 };
 
 export const getStaticProps = async (context) => {
-  console.log('context', context);
   const meetupId = context.params.meetupId;
+
+  const { client, meetupsCollection } = await connectToDatabase();
+
+  const selectedMeetup = await meetupsCollection.findOne({
+    _id: ObjectId(meetupId),
+  });
+  const { image, title, description, _id } = selectedMeetup;
+
+  client.close();
 
   return {
     props: {
       meetupData: {
-        image: '',
-        title: 'title',
-        description: 'descr',
-        address: 'address',
-        id: meetupId,
+        image: image,
+        title: title,
+        description: description,
+        id: _id.toHexString(),
       },
     },
   };
