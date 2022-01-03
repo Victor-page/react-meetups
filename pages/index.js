@@ -1,7 +1,20 @@
+import { Fragment } from 'react';
+import Head from 'next/head';
 import connectToDatabase from '../libs/mongodb';
 import MeetupList from '../components/meetups/MeetupList';
 
-const HomePage = ({ meetups }) => <MeetupList meetups={meetups} />;
+const HomePage = ({ meetups }) => (
+  <Fragment>
+    <Head>
+      <title>React Meetups</title>
+      <meta
+        name="description"
+        content="Browse a list of highly active React meetups"
+      />
+    </Head>
+    <MeetupList meetups={meetups} />
+  </Fragment>
+);
 
 export const getStaticProps = async () => {
   const { client, meetupsCollection } = await connectToDatabase();

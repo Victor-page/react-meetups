@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+import Head from 'next/head';
 import { ObjectId } from 'mongodb';
 import connectToDatabase from '../../libs/mongodb';
 import MeetupDetail from '../../components/meetups/MeetupDetail';
@@ -5,12 +7,18 @@ import MeetupDetail from '../../components/meetups/MeetupDetail';
 const MeetupDetails = ({
   meetupData: { image, title, description, address },
 }) => (
-  <MeetupDetail
-    image={image}
-    title={title}
-    description={description}
-    address={address}
-  />
+  <Fragment>
+    <Head>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+    </Head>
+    <MeetupDetail
+      image={image}
+      title={title}
+      description={description}
+      address={address}
+    />
+  </Fragment>
 );
 
 export const getStaticPaths = async () => {
