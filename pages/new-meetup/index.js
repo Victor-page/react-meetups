@@ -6,7 +6,7 @@ import NewMeetupForm from '../../components/meetups/NewMeetupForm';
 const NewMeetUpPage = () => {
   const router = useRouter();
 
-  async function addMeetupHandler(enteredMeetupData) {
+  const addMeetupHandler = async (enteredMeetupData) => {
     // get the current environment
     // const dev = process.env.NODE_ENV !== 'production';
     // const { DEV_URL, PROD_URL } = process.env;
@@ -22,7 +22,7 @@ const NewMeetUpPage = () => {
     // console.log(data);
 
     router.push('/');
-  }
+  };
 
   return (
     <Fragment>

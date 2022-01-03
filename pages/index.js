@@ -32,7 +32,7 @@ export const getStaticProps = async () => {
         id: _id.toHexString(),
       })),
     },
-    revalidate: 3600,
+    revalidate: 1,
   };
 };
 
